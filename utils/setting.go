@@ -33,7 +33,6 @@ func LoadServer(file *ini.File) {
 }
 
 func LoadData(file *ini.File) {
-	DB = file.Section("database").Key("DB").MustString("mysql")
 	DBHost = file.Section("database").Key("DBHost").MustString("127.0.0.1")
 	DBPort = file.Section("database").Key("DBPort").MustString("3306")
 	DBUser = file.Section("database").Key("DBUser").MustString("root")
