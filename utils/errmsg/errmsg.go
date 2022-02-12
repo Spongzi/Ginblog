@@ -12,6 +12,8 @@ const (
 	ERROR_TOKEN_WRONG      = 1006
 	ERROR_TOKEN_TYPE_WRONG = 1007
 	// code 2000... 文章模块的错误
+	ERROR_CATENAME_USED = 2001
+
 	// code 3000... 分类模块的错误
 )
 
@@ -25,6 +27,7 @@ var codeMsg = map[int]interface{}{
 	ERROR_TOKEN_RUNTIME:    "TOKEN已过期",
 	ERROR_TOKEN_WRONG:      "TOKEN不正确",
 	ERROR_TOKEN_TYPE_WRONG: "TOKEN格式错误",
+	ERROR_CATENAME_USED:    "分类已存在",
 }
 
 func GetErrMsg(code int) interface{} {
