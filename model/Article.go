@@ -25,7 +25,7 @@ func CreateArticle(data *Article) int {
 	return errmsg.SUCCESS
 }
 
-// GetArticle TODO 查询文章列表
+// GetArticle 查询文章列表
 func GetArticle(pageSize int, pageNum int) ([]Article, int) {
 	var articleList []Article
 	err = db.Debug().Preload("Category").Limit(pageSize).Offset((pageNum - 1) * pageSize).Find(&articleList).Error
@@ -35,7 +35,7 @@ func GetArticle(pageSize int, pageNum int) ([]Article, int) {
 	return articleList, errmsg.SUCCESS
 }
 
-// GetArtInfo TODO 查询单个文章
+// GetArtInfo 查询单个文章
 func GetArtInfo(id int) (Article, int) {
 	var art Article
 	//fmt.Println("我是art", art)
@@ -47,7 +47,7 @@ func GetArtInfo(id int) (Article, int) {
 	return art, errmsg.SUCCESS
 }
 
-// GetCatArt TODO 查询分类下的所有文章
+// GetCatArt 查询分类下的所有文章
 func GetCatArt(pageSize, pageNum, id int) ([]Article, int) {
 	var catArtList []Article
 	err = db.Debug().Preload("Category").

@@ -9,7 +9,7 @@ import (
 	"strconv"
 )
 
-// 添加文章
+// AddArticle 添加文章
 func AddArticle(c *gin.Context) {
 	// todo 添加文章
 	var data model.Article
