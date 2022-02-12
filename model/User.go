@@ -79,7 +79,3 @@ func ScryptPassword(password string) string {
 	FinalPassword := base64.StdEncoding.EncodeToString(HashPassword)
 	return FinalPassword
 }
-
-func (u *User) BeforeCreate() {
-
-}
