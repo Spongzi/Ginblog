@@ -1,6 +1,7 @@
 package model
 
 import (
+	"fmt"
 	"ginblog/utils/errmsg"
 	"gorm.io/gorm"
 )
@@ -8,7 +9,7 @@ import (
 type Article struct {
 	Category Category `gorm:"foreignKey:Cid"`
 	gorm.Model
-	Cid     int    `json:"cid"`
+	Cid     int    `gorm:"type:int; not null" json:"cid"`
 	Title   string `gorm:"type:varchar(100);not null" json:"title"`
 	Desc    string `gorm:"type:varchar(200)" json:"desc"` // 文章描述
 	Content string `gorm:"type:longtext" json:"content"`  // 文章内容
@@ -25,18 +26,41 @@ func CreateArticle(data *Article) int {
 }
 
 // GetArticle TODO 查询文章列表
-func GetArticle(pageSize int, pageNum int) []Article {
-	var art []Article
-	err = db.Debug().Limit(pageSize).Offset((pageNum - 1) * pageSize).Find(&art).Error
+func GetArticle(pageSize int, pageNum int) ([]Article, int) {
+	var articleList []Article
+	err = db.Debug().Preload("Category").Limit(pageSize).Offset((pageNum - 1) * pageSize).Find(&articleList).Error
 	if err != nil && err != gorm.ErrRecordNotFound {
-		return nil
+		return nil, errmsg.ERROR
 	}
-	return art
+	return articleList, errmsg.SUCCESS
 }
 
-// TODO 查询单个文章
+// GetArtInfo TODO 查询单个文章
+func GetArtInfo(id int) (Article, int) {
+	var art Article
+	//fmt.Println("我是art", art)
+	err = db.Debug().Preload("Category").Where("id = ?", id).First(&art).Error
+	if err != nil {
+		fmt.Println(err)
+		return art, errmsg.ERROR_ART_NOT_EXIST
+	}
+	return art, errmsg.SUCCESS
+}
 
-// TODO 查询分类下的所有文章
+// GetCatArt TODO 查询分类下的所有文章
+func GetCatArt(pageSize, pageNum, id int) ([]Article, int) {
+	var catArtList []Article
+	err = db.Debug().Preload("Category").
+		Limit(pageSize).
+		Offset((pageNum-1)*pageSize).
+		Where("cid = ?", id).
+		Find(&catArtList).
+		Error
+	if err != nil {
+		return nil, errmsg.ERROR_CATE_NOT_EXIST
+	}
+	return catArtList, errmsg.SUCCESS
+}
 
 // EditArticle 编辑分类
 func EditArticle(id int, data *Article) int {

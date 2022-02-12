@@ -22,9 +22,40 @@ func AddArticle(c *gin.Context) {
 	})
 }
 
-// 查询分类下所有文章
+// GetCatArt 查询分类下所有文章
+func GetCatArt(c *gin.Context) {
+	pageSize, _ := strconv.Atoi(c.Query("pagesize"))
+	pageNum, _ := strconv.Atoi(c.Query("pagenum"))
+	id, _ := strconv.Atoi(c.Param("id"))
+	if pageSize == 0 {
+		pageSize = -1
+	}
+	if pageNum == 0 {
+		pageNum = 2
+	}
+	//fmt.Println(pageSize)
+	//fmt.Println(pageNum)
+	data, code := model.GetCatArt(pageSize, pageNum, id)
+	c.JSON(http.StatusOK, gin.H{
+		"status":  code,
+		"data":    data,
+		"message": errmsg.GetErrMsg(code),
+	})
+}
 
-// 查询单个文章
+// GetArticleInfo 查询单个文章
+func GetArticleInfo(c *gin.Context) {
+	id, _ := strconv.Atoi(c.Param("id"))
+	//fmt.Println("我要开始报错了")
+	data, code := model.GetArtInfo(id)
+	//fmt.Println("我是data", data)
+	//fmt.Println("我是code", code)
+	c.JSON(http.StatusOK, gin.H{
+		"status":  code,
+		"data":    data,
+		"message": errmsg.GetErrMsg(code),
+	})
+}
 
 // GetArticle 查询文章列表
 func GetArticle(c *gin.Context) {
@@ -39,8 +70,8 @@ func GetArticle(c *gin.Context) {
 		pageNum = 2
 	}
 
-	data := model.GetArticle(pageSize, pageNum)
-	code = errmsg.SUCCESS
+	data, code := model.GetArticle(pageSize, pageNum)
+
 	c.JSON(http.StatusOK, gin.H{
 		"status":  code,
 		"data":    data,
